@@ -33,7 +33,7 @@
     <td height="3px"></td>
   </tr>
   <tr>
-    <td height="39" style="font-weight: bold"><a href="">收藏最多：</a>/</td>
+    <td height="39" style="font-weight: bold"><a href="">收藏最多：</a></td>
   </tr>
   <tr>
     <td class="bule-fornt"><span class="bule-fornt"><a href="">《活着》</a></span></td>

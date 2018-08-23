@@ -36,17 +36,15 @@ a:hover, a:active {
   </table></td>
     <td width="16%" bgcolor="#333333"><table width="100%" border="none" rules=none>
       <tr>
-        <td align="center" bgcolor="#333333"><span class="white-fornt"><a href="head.html">我的账户</a></span></td>
+        <td align="center" bgcolor="#333333"><span class="white-fornt"><a href="userVerify">我的账户</a></span></td>
       </tr>
       <tr>
-        <td align="center"><span class="white-fornt"><a href="head.html">购物车</a></span></td>
+        <td align="center"><span class="white-fornt"><a href="cart?display=true">购物车</a></span></td>
       </tr>
       <tr>
-        <td align="center"><span class="white-fornt"><a href="Index.jsp">回到主页</a></span></td>
+        <td align="center"><span class="white-fornt"><a href="index.jsp">回到主页</a></span></td>
       </tr>
-       <tr>
-        <td align="center"><span class="white-fornt"><a href="Upload.jsp">管理员界面（临时测试）</a></span></td>
-      </tr>
+       
     </table></td>
   </tr>
   <tr>

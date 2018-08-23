@@ -16,7 +16,13 @@
 
 function toIndex()
 {
-	window.open("Index.jsp","_self");
+	window.open("index.jsp","_self");
+}
+
+function toCar(id)
+{
+	window.alert("已加入购物车"+id)
+	window.open("cart?id="+id+"&&add=1","_self");
 }
 
 </script>
@@ -27,7 +33,7 @@ function toIndex()
     </td>
   </tr>
   <tr>
-    <td width="24%" rowspan="7" align="center" valign="middle"><img src="<%=dat.getBookCover() %>"></td>
+    <td width="24%" rowspan="7" align="center" valign="middle"><img src="images/<%=dat.getBookCover() %>" width=200 height=200></td>
     <td height="30" align="left" valign="middle">书籍名称：<%=dat.getBookName() %></td>
   </tr>
   <tr>
@@ -50,7 +56,7 @@ function toIndex()
   </tr>
   <tr>
     <td height="25" colspan="2" align="left" valign="middle"><input type="submit" name="buy" id="buy" value="购买" />
-    <input type="submit" name="buy2" id="buy2" value="加入购物车" />
+    <input type="button" onclick="toCar(<%=dat.getId()%>)" name="buy2" id="buy2" value="加入购物车" />
     <input type="submit"  onclick="toIndex()" name="buy3" id="buy3" value="返回首页" /></td>
   </tr>
   <tr>

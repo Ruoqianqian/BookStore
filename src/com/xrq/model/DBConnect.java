@@ -3,7 +3,7 @@ import java.sql.*;
 
 public class DBConnect {
 
-	private final String URL="jdbc:mysql://localhost:3306/bookstore";
+	private final String URL="jdbc:mysql://localhost:3306/bookstore?serverTimezone=GMT%2B8&useSSL=false";
 	private final String User="root";
 	private final String Password="123456";
 	private Connection ct;
