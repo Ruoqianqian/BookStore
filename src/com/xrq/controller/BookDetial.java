@@ -1,6 +1,8 @@
 package com.xrq.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.xrq.model.*; 
 
 /**
- * Servlet implementation class Control
+ * 实现书籍详细信息的显示
  */
-@WebServlet("/Control")
-public class Control extends HttpServlet {
+@WebServlet("/BookDetial")
+public class BookDetial extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Control() {
+    public BookDetial() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,12 +33,15 @@ public class Control extends HttpServlet {
 		// TODO Auto-generated method stub
 		String id = (String)request.getParameter("id");
 		DataBean dat1=null;
-		if(id!=null)
+		if(id!=null)  //if a specific book was clicked, a id will be post to this servlet
 		{
 			 dat1 = new DBOperation().getdata(Integer.parseInt(id));
+			 request.setAttribute("dat1", dat1);
+			 request.getRequestDispatcher("detail.jsp").forward(request, response);
 		}
-		request.setAttribute("dat1", dat1);
-		request.getRequestDispatcher("detail.jsp").forward(request, response);
+		
+		
+		
 		
 	}
 
