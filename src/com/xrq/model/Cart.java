@@ -8,6 +8,11 @@ public class Cart {
 	private String key="";
 	private HashMap<String,String> hm = new HashMap<String,String>();
 	
+	public String getNum(String bookId) //查看某件商品在购物车中的数量
+	{
+		return hm.get(bookId);
+	}
+	
 	public void addItem(String bookId,String num)
 	{
 	

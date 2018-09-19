@@ -1,110 +1,89 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ page import="com.xrq.model.* , java.util.*" %>
-<%
-	int num =1;
-	ArrayList<DataBean> al = (ArrayList<DataBean>)request.getAttribute("cart");
-	
-
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>购物车</title>
-<style type="text/css">
-.buy {
-	font-family: "Arial Black", Gadget, sans-serif;
-	font-size: xx-large;
-}
-.comfirm {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: large;
-	color: #F00;
-}
-.item {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: green;
-}
-
-</style>
-
+<link rel="stylesheet" href="CSS/cart.css">
 <script language="javascript">
-	total=0;
-	function toServlet()
-	{
-		window.open("cart?delAll=1","_self");
-	}
+	var total =0;
+	window.onload=function(){
 	
-	function changeNum(price,value)
-	{
+		document.getElementById("nextStep").onclick=function(){
+			window.open("PayJump?payment="+total,"_self");		
+		};	
+		document.getElementById("clearCart").onclick=function(){
+			window.open("cart?delAll=true","_self");
 		
-		total= total+price*value;
-		document.getElementById("price").innerHTML="合计: "+total+" 元";
-		window.alert(total);
-	}
-	function next()
+		};
+		
+		var  price = document.getElementsByClassName("price");
+		var itemsNum= document.getElementsByClassName("nums");
+		for(var i=0;i<price.length;i++)
+			{
+			
+				total+= parseFloat(price[i].innerHTML)*parseFloat(itemsNum[i].innerHTML);
+			
+			}
+		document.getElementById("TotalPrice").innerHTML=total+' 元';
+		
+	};
+	
+	
+	function plusfunc(id)
 	{
-		window.open("userVerify?payment="+total,"_self");
+		window.open("cart?add=true&&id="+id,"_self");	
+	}
+	function minusfunc(id)
+	{
+		window.open("cart?minus=true&&id="+id,"_self");	
 	}
 	
 </script>
 
 </head>
 <jsp:include page="head.jsp" flush="true"></jsp:include>
-<table width="100%" border="1" >
-  <tr>
-    <td height="116" colspan="4"><table width="100%" border="1">
-      <tr>
-        <td width="20%" height="109" align="center" class="buy">购物流程</td>
-        <td width="80%" align="center"> <table width="100%" border="0">
-          <tr>
-            <td width="35%" height="107" align="center" class="comfirm">商品确认</td>
-            <td width="32%" align="center">登陆</td>
-            <td width="33%" align="center">结算</td>
-          </tr>
-        </table></td>
-      </tr>
-    </table></td>
-  </tr>
-  <tr>
-    <td width="20%" align="center">编号</td>
-    <td width="29%" align="center">名称</td>
-    <td width="15%" align="center">单价</td>
-    <td width="36%" align="center">数量</td>
-  </tr>
-  <%
-  	if(al!=null){
-  		for(int i=0;i<al.size();i++) {
-  			
-  %>
-  <tr class="item">
-    <td align="center"><%=al.get(i).getId() %></td>
-    <td align="center"><%=al.get(i).getBookName() %></td>
-    <td align="center"><%=al.get(i).getBookPrice() %></td>
-    <td align="center"><table width="100%" border="0">
-   <tr>
-  
-        <td width="42%" align="center"><label for="num"></label>
-          <input type="text" name="num" onchange="changeNum(<%=al.get(i).getBookPrice()%>,this.value)" id="num" /></td>
-        <td width="33%" align="center"><a href=cart?del=1&&id=<%=al.get(i).getId()%>>删除</a></td>
-        <td width="25%" align="center"><a href="detial?id=<%=al.get(i).getId() %>">查看</a></td>
-      </tr>
-    </table></td>
-  </tr>
-   <%} }%>
-  <tr>
+<div id="PayPage">
+	<div id="payHead">
+		<div class="highLight">商品确认</div>
+		<div class="noSelect">登陆</div>
+		<div class="noSelect">订单确认</div>
+	</div>
+	<div id="payDetail">
+		<table width="100%" border="1" rules="all">
+			<tr>
+				<td width="10%" align="center">编号</td>
+				<td width="40%" align="center">名称</td>
+				<td width="10%" align="center">单价</td>
+				<td width="40%" align="center">数量</td>
+			</tr>
 
-    <td align="center" colspan="4" >&nbsp;</td>
-   
-  </tr>
-  <tr>
-    <td height="26" colspan="4" align="center">&nbsp;</td>
-  </tr>
-  <tr>
-    <td height="26" colspan="2" id="price" align="center">&nbsp;</td>
-    <td colspan="2" align="center"><input type="button" onclick = "toServlet()" name="del" id="del" value="删除所有商品" />&nbsp;&nbsp;&nbsp;<input type="submit" onclick ="next()" name="next" id="next" value="下一步" /></td>
-  </tr>
-</table>
+		<c:forEach items="${sessionScope.cartList}" var="i">
+			<tr>
+				<td width="10%" align="center" class="bookId">${i.id}</td>
+				<td width="40%" align="center">${i.bookName}</td>
+				<td width="10%" align="center"  class="price">${i.bookPrice}</td>
+				<td width="40%" align="center">
+					
+					<button  onclick="minusfunc(${i.id})">-</button>&nbsp
+					<span class="nums">${i.bookAmount}</span>&nbsp
+					<button  onclick="plusfunc(${i.id})">+</button> 
+					<a href="cart?del=true&&id=${i.id}">删除</a> &nbsp &nbsp 
+					<a href="detial?id=${i.id}">查看详情</a>
+				</td>
+			</tr>
+			</c:forEach>
+			<tr>
+			<td align="center">合计</td>
+			<td id="TotalPrice" colspan="3" align="center">元</td>
+			</tr>
+		</table>
+	</div>
+	<div id="PaySubmit">
+		<button id="clearCart">清空购物车</button>
+		<button id="nextStep">下一步</button>
+	</div>
+</div>
 </html>

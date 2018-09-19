@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,28 +43,64 @@ public class ShoppingCart extends HttpServlet {
 		String display = request.getParameter("display");
 		String del = request.getParameter("del");
 		String delAll = request.getParameter("delAll");
-		String count = request.getParameter("price");
-		String num = request.getParameter("num"); 
-		int total=0;
+		String addToCart = request.getParameter("detailJump");
+		String minus = request.getParameter("minus");
+		HttpSession se2 = request.getSession();
+		HttpSession se1 = request.getSession();
+
 		Cart c1 = (Cart)request.getSession().getAttribute("cart");
 		if(c1==null)  //session过期，或者第一次。每次都从session获得特定的购物车
-		{
-			System.out.println("购物车session过期");
+		{//	没有就新建一个购物车
+			System.out.println("首次进购物车或session过期");
 			 c1 = new Cart();
-			 request.getSession().setAttribute("cart", c1);
-			 request.getSession().setMaxInactiveInterval(30);
+			 se1.setAttribute("cart", c1);
+			 se1.setMaxInactiveInterval(60);
+		}
+		if(minus!=null)
+		{
+			String num = c1.getNum(bookId);
+			if(Integer.parseInt(num)>1)
+			{ 
+				int tmp = Integer.parseInt(num)-1;
+				c1.addItem(bookId,tmp+""); 
+			}
+			else {
+				c1.delItem(bookId);
+			}
+			String keySet = c1.displayItem();
+			ArrayList<DataBean> al = new DBOperation().displayCart(keySet,c1);
+			request.setAttribute("cart", al);
+			request.getRequestDispatcher("cart.jsp").forward(request, response);
 		}
 		if(add!=null)  //添加商品到购物车
 		{
-			c1.addItem(bookId, "1"); 
-			System.out.println("bookId: "+bookId);
-			response.sendRedirect("index.jsp");
+			String num = c1.getNum(bookId);
+			if (num==null) {
+				c1.addItem(bookId, "1"); 
+			}else
+			{
+				int tmp = Integer.parseInt(num)+1;
+				c1.addItem(bookId,tmp+""); 
+				System.out.println("new num: "+tmp);
+			}
+			if(addToCart!=null)  //在详情页加入购物车
+				response.sendRedirect("detial?id="+bookId);
+			else   //在购物车结算页更改购物车商品数量
+			{	
+				String keySet = c1.displayItem();
+				ArrayList<DataBean> al = new DBOperation().displayCart(keySet,c1);
+				se2.setAttribute("cartList", al);
+				se2.setMaxInactiveInterval(60);
+				request.getRequestDispatcher("cart.jsp").forward(request, response);
+			}
 		}
 		if(display!=null)  //显示购物车页面
 		{
 			String keySet = c1.displayItem();
-			ArrayList<DataBean> al = new DBOperation().displayCart(keySet);
-			request.setAttribute("cart", al);
+			ArrayList<DataBean> al = new DBOperation().displayCart(keySet,c1);
+	
+			se2.setAttribute("cartList", al);
+			se2.setMaxInactiveInterval(60);
 			request.getRequestDispatcher("cart.jsp").forward(request, response);
 		}
 		
@@ -71,8 +108,9 @@ public class ShoppingCart extends HttpServlet {
 		{
 			c1.delItem(bookId);
 			String keySet = c1.displayItem();
-			ArrayList<DataBean> al = new DBOperation().displayCart(keySet);
-			request.setAttribute("cart", al);
+			ArrayList<DataBean> al = new DBOperation().displayCart(keySet,c1);
+			se2.setAttribute("cartList", al);
+			se2.setMaxInactiveInterval(60);
 			request.getRequestDispatcher("cart.jsp").forward(request, response);
 		}
 		
@@ -80,29 +118,13 @@ public class ShoppingCart extends HttpServlet {
 		{
 			c1.delAll();
 			String keySet = c1.displayItem();
-			ArrayList<DataBean> al = new DBOperation().displayCart(keySet);
-			request.setAttribute("cart", al);
+			ArrayList<DataBean> al = new DBOperation().displayCart(keySet,c1);
+			se2.setAttribute("cartList", al);
+			se2.setMaxInactiveInterval(60);
 			request.getRequestDispatcher("cart.jsp").forward(request, response);
 		}
-		if(count!=null) //商品数量变更，计算价格
-		{
-			int price = Integer.parseInt(count);
-			int number = Integer.parseInt(num);
-			if(number>1)
-				total = price*(number-1);
-			request.setAttribute("total", total+"");
-			String keySet = c1.displayItem();
-			ArrayList<DataBean> al = new DBOperation().displayCart(keySet);
-			request.setAttribute("cart", al);
-			request.getRequestDispatcher("cart.jsp").forward(request, response);
-			
-		}
-		
-		
-		
+
 	
-		
-		
 		
 	}
 

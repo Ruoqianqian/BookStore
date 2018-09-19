@@ -11,6 +11,13 @@ public class DataBean {
 	private String bookIntro;
 	private String bookCover;
 	private String bookType;
+	private String SellCount;  
+	private String DiaplayFlag; //newbook or recommend in index
+	private String userId;
+	private String userAddress;
+	private String userEmail;
+	private String userPhone;
+	
 	
 	public int getId() {
 		return id;
@@ -71,6 +78,42 @@ public class DataBean {
 	}
 	public void setBookType(String bookType) {
 		this.bookType = bookType;
+	}
+	public String getSellCount() {
+		return SellCount;
+	}
+	public void setSellCount(String sellCount) {
+		SellCount = sellCount;
+	}
+	public String getDiaplayFlag() {
+		return DiaplayFlag;
+	}
+	public void setDiaplayFlag(String diaplayFlag) {
+		DiaplayFlag = diaplayFlag;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getUserAddress() {
+		return userAddress;
+	}
+	public void setUserAddress(String userAddress) {
+		this.userAddress = userAddress;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+	public String getUserPhone() {
+		return userPhone;
+	}
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}	
 
 }

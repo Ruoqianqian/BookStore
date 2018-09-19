@@ -1,6 +1,8 @@
 package com.xrq.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ public class UserVerify extends HttpServlet {
        
     /**
      * @see HttpServlet#HttpServlet()
+     * 
      */
     public UserVerify() {
         super();
@@ -30,67 +33,47 @@ public class UserVerify extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 String loginFlag = (String)request.getSession().getAttribute("login");
+		 String sessionFlag = (String)request.getSession().getAttribute("login");
 		 String jumpFlag =(String)request.getParameter("jumpFlag");  //正常登录页登陆
 		 String payFlag = (String)request.getParameter("payment");  //付款页跳过来的
-		 String payLogin =(String) request.getParameter("payLogin");  //付款页登陆的
-		 if(loginFlag==null && jumpFlag==null && payFlag==null && payLogin==null) //loginflag是已登陆（session），jumpflag是输入了账号密码跳转过来
+		//sessionflag是已登陆（session），jumpflag是输入了账号密码跳转过来
+		 if(sessionFlag!=null) 
 		 {
-			 request.getRequestDispatcher("login.jsp").forward(request, response);
-		 }
-		 else if(loginFlag!=null)
-		 {
-			 System.out.println("session记录登陆信息");
 			 if(payFlag==null)
-				 //session中完成登陆的
+				 //session中完成登陆的，且并不是支付页发起的
 				 request.getRequestDispatcher("loginResult.jsp").forward(request, response);
-			 else {
+			 else 
+				 //支付页发起的登陆
 				 request.getRequestDispatcher("pay.jsp").forward(request, response);
-			 }
-		 }else if(jumpFlag!=null)
-		 {
+				  
+		}else if(jumpFlag!=null || payFlag!=null){
+			 //付款页或直接登录页发起登陆请求
 			 //验证输入的账号密码
-			 String user = (String)request.getParameter("userName");
-			 String password = (String)request.getParameter("userPassword");
-			 String [] login = new DBOperation().UserVerify(user);
-			 if (login[0].equals(password)) 
-			 {
-				 HttpSession se = request.getSession();
-				 se.setMaxInactiveInterval(30);
-				 se.setAttribute("login", "true");
-				 se.setAttribute("name", user);
-				 se.setAttribute("type", login[1]);
-				 request.getRequestDispatcher("loginResult.jsp").forward(request, response);
-			
-			 }else
-			 {
-				response.sendRedirect("errorPage.jsp");
-			 }
-		 }
-		 else if(payFlag!=null && payLogin==null)  //之前未登录，且触发购物请求
-		 {
+				 String user = (String)request.getParameter("userName");
+				 String password = (String)request.getParameter("userPassword");
+				 String[] login=null;  //login[0]--password ,login[1]---type
+				login = new DBOperation().UserVerify(user);
+				if (login[0].equals(password))   //password correct
+				 {
+					 HttpSession se = request.getSession();
+					 se.setMaxInactiveInterval(60);
+					 se.setAttribute("login", "true");
+					 se.setAttribute("name", user);
+					 se.setAttribute("type", login[1]);
+					 if(payFlag==null)
+						 request.getRequestDispatcher("loginResult.jsp").forward(request, response);
+					 else
+						 request.getRequestDispatcher("pay.jsp").forward(request, response);
+				
+				 }else
+				 {  //password error
+					response.sendRedirect("errorPage.jsp");
+				 }
+		 }else {
+			 //之前未登录，且触发购物请求
 			 //转入登录页
-			 request.getRequestDispatcher("PayLogin.jsp").forward(request, response);	
+			 request.getRequestDispatcher("login.jsp").forward(request, response);	
 		
-		 }else if(payLogin!=null)
-		 {
-			//验证输入的账号密码
-			 String user = (String)request.getParameter("userName");
-			 String password = (String)request.getParameter("userPassword");
-			 String [] login = new DBOperation().UserVerify(user);
-			 if (login[0].equals(password)) 
-			 {
-				 HttpSession se = request.getSession();
-				 se.setMaxInactiveInterval(30);
-				 se.setAttribute("login", "true");
-				 se.setAttribute("name", user);
-				 se.setAttribute("type", login[1]);
-				 request.getRequestDispatcher("pay.jsp").forward(request, response);	 
-			 }
-			 else
-			 {
-				 	response.sendRedirect("errorPage.jsp");
-			 }
 		 }
 }
 

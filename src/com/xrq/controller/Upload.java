@@ -88,14 +88,14 @@ public class Upload extends HttpServlet {
 					int len=0;
 					while((len=is.read(buff))>0)
 					{
-						fos.write(buff);
+						fos.write(buff); 
 					}
 						fos.close();
 					}
 				
 			}
 	    	new DBOperation().insert(dat);
-			request.getRequestDispatcher("Index.jsp").forward(request, response);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 			 
 			
 		} catch (FileUploadException e) {

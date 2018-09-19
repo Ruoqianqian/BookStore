@@ -63,7 +63,6 @@
 
   <tr>
     <td height="54" colspan="3">
-    <jsp:include page="buttom.jsp" flush="true"></jsp:include>
     </td>
   </tr>
 </table>

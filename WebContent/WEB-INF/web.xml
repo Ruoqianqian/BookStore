@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <filter>
+    <filter-name>TestFilter</filter-name>
+    <filter-class>com.xrq.filter.TestFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>TestFilter</filter-name>
+    <url-pattern>/index.jsp</url-pattern>
+  </filter-mapping>
   <servlet>
     <servlet-name>test</servlet-name>
     <servlet-class>com.xrq.controller.BookDetial</servlet-class>
@@ -9,6 +17,14 @@
     <url-pattern>/detial</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>PayLogin</servlet-name>
+    <servlet-class>com.xrq.controller.PayLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PayLogin</servlet-name>
+    <url-pattern>/PayJump</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>verify</servlet-name>
     <servlet-class>com.xrq.controller.UserVerify</servlet-class>
   </servlet>
@@ -16,9 +32,7 @@
     <servlet-name>verify</servlet-name>
     <url-pattern>/userVerify</url-pattern>
   </servlet-mapping>
-  
-  
-   <servlet>
+  <servlet>
     <servlet-name>cart</servlet-name>
     <servlet-class>com.xrq.controller.ShoppingCart</servlet-class>
   </servlet>
@@ -26,7 +40,6 @@
     <servlet-name>cart</servlet-name>
     <url-pattern>/cart</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>uploadServe</servlet-name>
     <servlet-class>com.xrq.controller.Upload</servlet-class>
@@ -34,5 +47,22 @@
   <servlet-mapping>
     <servlet-name>uploadServe</servlet-name>
     <url-pattern>/Upload.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>orderServlet</servlet-name>
+    <servlet-class>com.xrq.controller.Order</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>orderServlet</servlet-name>
+    <url-pattern>/orderSystem</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>orderDisplay</servlet-name>
+    <servlet-class>com.xrq.controller.ShowOrder</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>orderDisplay</servlet-name>
+    <url-pattern>/orderDisplay</url-pattern>
   </servlet-mapping>
 </web-app>
